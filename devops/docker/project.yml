@@ -1,0 +1,29 @@
+version: '3.1'
+services:
+
+  project-main_postgresql_db:
+    image: postgres:9
+    container_name: project-main_postgresql_db
+    restart: always
+    networks:
+      project_net:
+        aliases:
+        - project-main_postgresql_db
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: qwerty
+
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      project_net:
+        aliases:
+        - adminer
+    ports:
+    - 8080:8080
+
+networks:
+  project_net:
