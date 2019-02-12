@@ -4,14 +4,5 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
-    <includeAll path="changesets\sprint7"/>
-    <includeAll path="changesets\sprint8"/>
-    <includeAll path="changesets\sprint9"/>
-    <includeAll path="changesets\sprint10"/>
-    <includeAll path="changesets\sprint11"/>
-    <includeAll path="changesets\sprint12"/>
-    <includeAll path="changesets\sprint13"/>
-    <includeAll path="changesets\sprint14"/>
-    <includeAll path="changesets\sprint15"/>
-    <includeAll path="changesets\sprint16"/>
+    <includeAll path="changesets"/>
 </databaseChangeLog>
