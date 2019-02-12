@@ -1,0 +1,9 @@
+rootProject.name = 'project'
+include 'project-main'
+include 'project-main:app'
+findProject(':project-main:app')?.name = 'app'
+include 'project-main:db'
+findProject(':project-main:db')?.name = 'db'
+include 'project-main:domain'
+findProject(':project-main:domain')?.name = 'domain'
+
