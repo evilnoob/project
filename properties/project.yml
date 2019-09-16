@@ -1,0 +1,56 @@
+hibernate:
+  dialect: org.hibernate.dialect.PostgreSQL9Dialect
+  connection:
+    useUnicode: true
+    charSet: UTF-8
+    autocommit: false
+    release_mode: after_transaction
+  bytecode:
+    use_reflection_optimizer: true
+    provider: javassist
+  jdbc:
+    use_scrollable_resultset: false
+    use_streams_for_binary: true
+    fetch_size: 200
+  enable_lazy_load_no_trans: true
+  temp.use_jdbc_metadata_defaults: false
+  jdbc.batch_size: 30
+  show_sql: true
+  format_sql: true
+  generate_statistics: true
+  use_sql_comments: false
+  session.events.log: false
+
+postgresql:
+  dataSourceClassName: org.postgresql.ds.PGSimpleDataSource
+  dataSource:
+    serverName: localhost
+    portNumber: 5432
+    user: root
+    password: qwerty
+  minimumIdle: 2
+  maximumPoolSize: 10
+  initializationFailTimeout: -1
+  registerMbeans: true
+  poolName: HikariPool-PROJECT
+
+http.rest.request.timeout:
+  read: 10000
+  connect: 10000
+
+cross.origin.white.list: http://localhost:8082,http://localhost:8083,http://localhost:3003
+
+ssauth:
+  login.url: http://localhost:8083/wcs-ss/?basic?#/
+  session:
+    cookie: AUTH_SESSION_ID
+    user.url: http://localhost:8083/wcs-ss-server/api/v1/user/authorization/WRN
+    user.organizations.url: http://localhost:8083/wcs-ss-server/api/v1/user/organizations/structure/WRN
+    user.cookie: WCS_SS_SESSION_ID
+    expiration.period: 5
+  organizations:
+    root.url: http://localhost:8083/wcs-ss-server/api/v1/organization/check-update-structure/WRN
+
+ss-module:
+  url: http://localhost:8083
+  context: /wcs-ss-server/api/v1/

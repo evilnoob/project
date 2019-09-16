@@ -1,0 +1,7 @@
+group 'ru.evilnoob.project.common'
+version rootProject.version
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.apache.commons:commons-lang3'
+}

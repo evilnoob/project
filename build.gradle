@@ -1,16 +1,145 @@
-plugins {
-    id 'java'
+group "ru.evilnoob"
+version "1.0"
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "https://maven.atlassian.com/3rdparty/"
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "https://repo.spring.io/milestone/"
+        }
+        maven {
+            url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"
+        }
+    }
+
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.4.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE"
+    }
 }
 
-group 'ru.evilnoob'
-version '1.0'
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
+ext {
+    springBootVersion = "2.0.1.RELEASE"
+    springVersion = "5.1.9.RELEASE"
+    springSecurityVersion = "5.1.9.RELEASE"
+    springDataJpaVersion = "2.1.10.RELEASE"
+    postgresDriverVersion = "42.2.4"
+    hibernateVersion = "5.3.7.Final"
+    commonsLangVersion = "3.7"
+    lombokVersion = "1.16.20"
+    junitVersion = "4.12"
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+subprojects {
+    apply plugin: "java"
+    apply plugin: "io.spring.dependency-management"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "https://maven.atlassian.com/3rdparty/"
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "https://repo.spring.io/milestone/"
+        }
+        maven {
+            url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"
+        }
+    }
+
+    dependencyManagement {
+        dependencies {
+            dependency "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-starter-jersey:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-starter-security:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-devtools:$springBootVersion"
+
+            //Hibernate
+            dependency "org.hibernate:hibernate-core:$hibernateVersion"
+            dependency "org.hibernate:hibernate-entitymanager:$hibernateVersion"
+
+            //PostgreSQL
+            dependency "org.postgresql:postgresql:$postgresDriverVersion"
+
+            dependency "org.apache.commons:commons-lang3:$commonsLangVersion"
+
+            //Test
+            dependency "org.springframework:spring-test:$springVersion"
+            dependency "junit:junit:$junitVersion"
+        }
+    }
+}
+
+task redeployAll(type: GradleBuild) {
+    group "devenv"
+    setTasks([
+            ':killRmRmiAllContainersAndImages',
+            ':buildLocalArtifacts',
+            ':dockerComposeAll'
+    ])
+}
+
+task buildLocalArtifacts(type: GradleBuild) {
+    group "devEnv"
+    setTasks([
+            "cleanArtifacts",
+            "buildMainArtifacts",
+            "copyDockerFiles"
+    ])
+}
+
+task cleanArtifacts(type: Delete) {
+    group "devEnv"
+    delete "${rootDir}/artifact"
+}
+
+task copyDockerFiles(type: Copy) {
+    group "devEnv"
+    from "${rootDir}/devops/docker/"
+    into "${rootDir}/artifact/project"
+}
+
+task buildMainArtifacts(type: GradleBuild, dependsOn: "cleanArtifacts") {
+    group "devMain"
+    setTasks([
+            "copyMainLiquibaseScripts"
+    ])
+}
+
+task copyMainLiquibaseScripts(type: Copy) {
+    group "devMain"
+    from "${rootDir}/project-db/src/main/resources"
+    into "${rootDir}/artifact/project/db"
+}
+
+task killRmRmiAllContainersAndImages(type: Exec) {
+    ignoreExitValue = true
+    def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
+    def runningEnvironment = isWindows ? "cmd" : "bash"
+    def parameter = isWindows ? "/c" : "-c"
+
+    commandLine runningEnvironment, parameter,
+            "docker kill project_db & docker rm project_db & docker rmi project_db & " +
+                    "docker kill project_liquibase & docker rm project_liquibase & docker rmi project_liquibase"
+}
+
+task dockerComposeAll(type: Exec) {
+    def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
+    def runningEnvironment = isWindows ? "cmd" : "bash"
+    def parameter = isWindows ? "/c" : "-c"
+
+    commandLine runningEnvironment, parameter, "docker-compose -f ${rootDir}/artifact/project/project.yml up -d"
 }

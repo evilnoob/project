@@ -1,5 +1,5 @@
---liquibase formatted sql logicalFilePath:V1_003_user.sql
---changeset akhudoleev:1.3 runOnChange:false context:prod
+--liquibase formatted sql logicalFilePath:s1_user.sql
+--changeset akhudoleev:user-01 runOnChange:false context:prod
 
 CREATE TABLE auth.user (
   user_id     SERIAL PRIMARY KEY,
