@@ -13,7 +13,7 @@ apply plugin: "org.springframework.boot"
 
 processResources {
     from(rootProject.projectDir.getPath() + "/properties") {
-        include '**/project.yaml'
+        include '**/application.yml'
     }
 }
 

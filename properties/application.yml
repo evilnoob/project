@@ -34,23 +34,7 @@ postgresql:
   registerMbeans: true
   poolName: HikariPool-PROJECT
 
-http.rest.request.timeout:
-  read: 10000
-  connect: 10000
-
-cross.origin.white.list: http://localhost:8082,http://localhost:8083,http://localhost:3003
-
-ssauth:
-  login.url: http://localhost:8083/wcs-ss/?basic?#/
-  session:
-    cookie: AUTH_SESSION_ID
-    user.url: http://localhost:8083/wcs-ss-server/api/v1/user/authorization/WRN
-    user.organizations.url: http://localhost:8083/wcs-ss-server/api/v1/user/organizations/structure/WRN
-    user.cookie: WCS_SS_SESSION_ID
-    expiration.period: 5
-  organizations:
-    root.url: http://localhost:8083/wcs-ss-server/api/v1/organization/check-update-structure/WRN
-
-ss-module:
-  url: http://localhost:8083
-  context: /wcs-ss-server/api/v1/
+#Spring actuator props
+management:
+  endpoints.web.exposure.include: health,metrics,metrics-requiredMetricName,jolokia,heapdump
+  endpoint.health.show-details=always: always

@@ -1,6 +1,10 @@
 group "ru.evilnoob"
 version "1.0"
 
+apply from: "buildProjectApp.gradle"
+apply from: "buildProjectCommon.gradle"
+apply from: "buildProjectLiquibase.gradle"
+
 buildscript {
     repositories {
         mavenLocal()
@@ -83,63 +87,3 @@ subprojects {
     }
 }
 
-task redeployAll(type: GradleBuild) {
-    group "devenv"
-    setTasks([
-            ':killRmRmiAllContainersAndImages',
-            ':buildLocalArtifacts',
-            ':dockerComposeAll'
-    ])
-}
-
-task buildLocalArtifacts(type: GradleBuild) {
-    group "devEnv"
-    setTasks([
-            "cleanArtifacts",
-            "buildMainArtifacts",
-            "copyDockerFiles"
-    ])
-}
-
-task cleanArtifacts(type: Delete) {
-    group "devEnv"
-    delete "${rootDir}/artifact"
-}
-
-task copyDockerFiles(type: Copy) {
-    group "devEnv"
-    from "${rootDir}/devops/docker/"
-    into "${rootDir}/artifact/project"
-}
-
-task buildMainArtifacts(type: GradleBuild, dependsOn: "cleanArtifacts") {
-    group "devMain"
-    setTasks([
-            "copyMainLiquibaseScripts"
-    ])
-}
-
-task copyMainLiquibaseScripts(type: Copy) {
-    group "devMain"
-    from "${rootDir}/project-db/src/main/resources"
-    into "${rootDir}/artifact/project/db"
-}
-
-task killRmRmiAllContainersAndImages(type: Exec) {
-    ignoreExitValue = true
-    def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
-    def runningEnvironment = isWindows ? "cmd" : "bash"
-    def parameter = isWindows ? "/c" : "-c"
-
-    commandLine runningEnvironment, parameter,
-            "docker kill project_db & docker rm project_db & " +
-                    "docker kill project_liquibase & docker rm project_liquibase & docker rmi project_liquibase"
-}
-
-task dockerComposeAll(type: Exec) {
-    def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
-    def runningEnvironment = isWindows ? "cmd" : "bash"
-    def parameter = isWindows ? "/c" : "-c"
-
-    commandLine runningEnvironment, parameter, "docker-compose -f ${rootDir}/artifact/project/project.yml up -d"
-}

@@ -1,0 +1,63 @@
+//DEPLOY
+task buildAndDeployAll(type: GradleBuild) {
+    group "deploy"
+    setTasks([
+            ":buildLocalArtifacts",
+            ":dockerComposeAll"
+    ])
+}
+
+task redeployAll(type: GradleBuild) {
+    group "redeploy"
+    setTasks([
+            ":killRmRmiAllContainersAndImages",
+            ":buildAndDeployAll"
+    ])
+}
+
+//BUILD
+task buildLocalArtifacts(type: GradleBuild) {
+    group "devenv"
+    setTasks([
+            "cleanArtifacts",
+            "buildAndCopyAppArtifacts",
+            "copyMainLiquibaseScripts",
+            "copyDockerFiles"
+    ])
+}
+
+task cleanArtifacts(type: Delete) {
+    delete "${rootDir}/artifact"
+}
+
+task copyDockerFiles(type: Copy) {
+    from "${rootDir}/devops/docker/"
+    into "${rootDir}/artifact/project"
+}
+
+task killRmRmiDB(type: Exec) {
+    ignoreExitValue = true
+    def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
+    def runningEnvironment = isWindows ? "cmd" : "bash"
+    def parameter = isWindows ? "/c" : "-c"
+
+    commandLine runningEnvironment, parameter,
+            "docker kill project_db & docker rm project_db"
+}
+
+task killRmRmiAllContainersAndImages(type: GradleBuild) {
+    setTasks([
+            "killRmRmiDB",
+            "killRmRmiLiquibase",
+            "killRmRmiApp"
+    ])
+}
+
+task dockerComposeAll(type: Exec) {
+    def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
+    def runningEnvironment = isWindows ? "cmd" : "bash"
+    def parameter = isWindows ? "/c" : "-c"
+
+    commandLine runningEnvironment, parameter, "docker-compose -f ${rootDir}/artifact/project/project.yml up -d"
+}
+

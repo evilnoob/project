@@ -1,0 +1,53 @@
+task redeployApp(type: GradleBuild) {
+    group "redeploy"
+    setTasks([
+            "killRmRmiApp",
+            "buildAndCopyAppArtifacts",
+            "dockerComposeAll"
+    ])
+}
+
+//TECH TASKS
+task buildAndCopyAppArtifacts(type: GradleBuild) {
+    setTasks([
+            "buildApp",
+            "copyAppArtifact",
+            "copyAppProperties"
+    ])
+}
+
+task buildApp(type: GradleBuild) {
+    setTasks([
+            "clean",
+            ":project-domain:compileJava",
+            ":project-domain:processResources",
+            ":project-domain:classes",
+            ":project-domain:jar",
+            ":project-app:compileJava",
+            ":project-app:processResources",
+            ":project-app:classes",
+            ":project-app:bootJar",
+            ":project-app:jar",
+            ":project-app:assemble"
+    ])
+}
+
+task copyAppArtifact(type: Copy, dependsOn: "buildApp") {
+    from "${rootDir}/project-app/build/libs"
+    into "${rootDir}/artifact/project/app"
+}
+
+task copyAppProperties(type: Copy) {
+    from "${rootDir}/properties"
+    into "${rootDir}/artifact/project/app"
+}
+
+task killRmRmiApp(type: Exec) {
+    ignoreExitValue = true
+    def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
+    def runningEnvironment = isWindows ? "cmd" : "bash"
+    def parameter = isWindows ? "/c" : "-c"
+
+    commandLine runningEnvironment, parameter,
+                    "docker kill project_app & docker rm project_app & docker rmi project_app"
+}

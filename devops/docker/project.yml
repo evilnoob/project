@@ -4,13 +4,12 @@ services:
   project_db:
     image: postgres:9
     container_name: project_db
-    restart: always
     networks:
       project_net:
         aliases:
-        - project_db
+          - project_db
     ports:
-    - "5432:5432"
+      - "5432:5432"
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: qwerty
@@ -28,9 +27,9 @@ services:
     networks:
       project_net:
         aliases:
-        - project_liquibase
+          - project_liquibase
     depends_on:
-    - project_db
+      - project_db
     environment:
       LIQUIBASE_URL: "jdbc:postgresql://project_db:5432/postgres?charSet=utf8&loglevel=2"
       LIQUIBASE_USER: "root"
@@ -40,6 +39,26 @@ services:
       interval: 10s
       timeout: 5m
       retries: 1
+
+  project_app:
+    image: project_app
+    container_name: project_app
+    build:
+      context: app
+    networks:
+      project_net:
+        aliases:
+          - project_app
+    depends_on:
+      - project_db
+      - project_liquibase
+    ports:
+      - "8080:8080"
+      - "8000:8000"
+    healthcheck:
+      timeout: 5m
+      test: ["CMD", "curl", "-f" ,"http://localhost:8080/actuator/health"]
+      retries: 10
 
 networks:
   project_net:
