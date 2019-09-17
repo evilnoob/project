@@ -132,7 +132,7 @@ task killRmRmiAllContainersAndImages(type: Exec) {
     def parameter = isWindows ? "/c" : "-c"
 
     commandLine runningEnvironment, parameter,
-            "docker kill project_db & docker rm project_db & docker rmi project_db & " +
+            "docker kill project_db & docker rm project_db & " +
                     "docker kill project_liquibase & docker rm project_liquibase & docker rmi project_liquibase"
 }
 

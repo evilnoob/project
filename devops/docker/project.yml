@@ -24,7 +24,7 @@ services:
     image: project_liquibase
     container_name: project_liquibase
     build:
-      context: project/db
+      context: db
     networks:
       project_net:
         aliases:
@@ -32,9 +32,9 @@ services:
     depends_on:
     - project_db
     environment:
-      LIQUIBASE_URL: jdbc:postgresql://project_postgresql_db:5432/postgres?charSet=utf8&loglevel=2
-      LIQUIBASE_USER: root
-      LIQUIBASE_USER_PASSWORD: qwerty
+      LIQUIBASE_URL: "jdbc:postgresql://project_db:5432/postgres?charSet=utf8&loglevel=2"
+      LIQUIBASE_USER: "root"
+      LIQUIBASE_USER_PASSWORD: "qwerty"
     working_dir: /project_liquibase
     healthcheck:
       interval: 10s
