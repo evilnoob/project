@@ -1,57 +1,36 @@
 version: '3.1'
 services:
 
-  project_db:
-    image: postgres:9
-    container_name: project_db
+  project-db:
+    image: project-db
+    container_name: project-db
+    build:
+      context: db
     networks:
       project_net:
         aliases:
-          - project_db
+          - project-db
+    env_file: properties.env
     ports:
       - "5432:5432"
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: qwerty
     healthcheck:
       interval: 10s
       timeout: 5s
       retries: 5
       test: ["CMD", "pg_isready -U postgres"]
 
-  project_liquibase:
-    image: project_liquibase
-    container_name: project_liquibase
-    build:
-      context: db
-    networks:
-      project_net:
-        aliases:
-          - project_liquibase
-    depends_on:
-      - project_db
-    environment:
-      LIQUIBASE_URL: "jdbc:postgresql://project_db:5432/postgres?charSet=utf8&loglevel=2"
-      LIQUIBASE_USER: "root"
-      LIQUIBASE_USER_PASSWORD: "qwerty"
-    working_dir: /project_liquibase
-    healthcheck:
-      interval: 10s
-      timeout: 5m
-      retries: 1
-
-  project_app:
-    image: project_app
-    container_name: project_app
+  project-app:
+    image: project-app
+    container_name: project-app
     build:
       context: app
     networks:
       project_net:
         aliases:
-          - project_app
+          - project-app
     depends_on:
-      - project_db
-      - project_liquibase
+      - project-db
+    env_file: properties.env
     ports:
       - "8080:8080"
       - "8000:8000"

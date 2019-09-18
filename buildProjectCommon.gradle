@@ -2,16 +2,16 @@
 task buildAndDeployAll(type: GradleBuild) {
     group "deploy"
     setTasks([
-            ":buildLocalArtifacts",
-            ":dockerComposeAll"
+            "buildLocalArtifacts",
+            "composeContainers"
     ])
 }
 
 task redeployAll(type: GradleBuild) {
     group "redeploy"
     setTasks([
-            ":killRmRmiAllContainersAndImages",
-            ":buildAndDeployAll"
+            "killRmRmiAllContainersAndImages",
+            "buildAndDeployAll"
     ])
 }
 
@@ -27,6 +27,7 @@ task buildLocalArtifacts(type: GradleBuild) {
 }
 
 task cleanArtifacts(type: Delete) {
+    group "deploy"
     delete "${rootDir}/artifact"
 }
 
@@ -35,22 +36,27 @@ task copyDockerFiles(type: Copy) {
     into "${rootDir}/artifact/project"
 }
 
-task killRmRmiDB(type: Exec) {
-    ignoreExitValue = true
+task composeContainers(type: GradleBuild) {
+    setTasks([
+            "dockerBuildDbImage",
+            "dockerComposeAll"
+    ])
+}
+
+//DOCKER TECH TASKS
+task killRmRmiAllContainersAndImages(type: GradleBuild) {
+    setTasks([
+            "killRmRmiDB",
+            "killRmRmiApp"
+    ])
+}
+
+task dockerBuildDbImage(type: Exec) {
     def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
     def runningEnvironment = isWindows ? "cmd" : "bash"
     def parameter = isWindows ? "/c" : "-c"
 
-    commandLine runningEnvironment, parameter,
-            "docker kill project_db & docker rm project_db"
-}
-
-task killRmRmiAllContainersAndImages(type: GradleBuild) {
-    setTasks([
-            "killRmRmiDB",
-            "killRmRmiLiquibase",
-            "killRmRmiApp"
-    ])
+    commandLine runningEnvironment, parameter, "docker build -t project-postgres-java ${rootDir}/artifact/project/db/image/"
 }
 
 task dockerComposeAll(type: Exec) {
@@ -60,4 +66,3 @@ task dockerComposeAll(type: Exec) {
 
     commandLine runningEnvironment, parameter, "docker-compose -f ${rootDir}/artifact/project/project.yml up -d"
 }
-

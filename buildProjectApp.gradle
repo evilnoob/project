@@ -3,7 +3,7 @@ task redeployApp(type: GradleBuild) {
     setTasks([
             "killRmRmiApp",
             "buildAndCopyAppArtifacts",
-            "dockerComposeAll"
+            "composeContainers"
     ])
 }
 
@@ -49,5 +49,5 @@ task killRmRmiApp(type: Exec) {
     def parameter = isWindows ? "/c" : "-c"
 
     commandLine runningEnvironment, parameter,
-                    "docker kill project_app & docker rm project_app & docker rmi project_app"
+                    "docker kill project-app & docker rm project-app & docker rmi project-app"
 }

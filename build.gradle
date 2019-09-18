@@ -3,7 +3,7 @@ version "1.0"
 
 apply from: "buildProjectApp.gradle"
 apply from: "buildProjectCommon.gradle"
-apply from: "buildProjectLiquibase.gradle"
+apply from: "buildProjectDb.gradle"
 
 buildscript {
     repositories {

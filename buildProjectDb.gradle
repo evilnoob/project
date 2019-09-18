@@ -1,0 +1,15 @@
+task copyMainLiquibaseScripts(type: Copy) {
+    group "devMain"
+    from "${rootDir}/project-db"
+    into "${rootDir}/artifact/project/db"
+}
+
+task killRmRmiDB(type: Exec) {
+    ignoreExitValue = true
+    def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
+    def runningEnvironment = isWindows ? "cmd" : "bash"
+    def parameter = isWindows ? "/c" : "-c"
+
+    commandLine runningEnvironment, parameter,
+            "docker kill project-db & docker rm project-db"
+}

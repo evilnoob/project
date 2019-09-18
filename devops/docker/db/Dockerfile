@@ -1,10 +1,8 @@
-FROM openjdk:8u171-jdk AS project_liquibase
+FROM project-postgres-java AS project-db
 ENV TZ Europe/Moscow
-WORKDIR /project_liquibase
-COPY / /project_liquibase
-RUN chmod -R 777 /project_liquibase
-ENV LIQUIBASE_URL=${LIQUIBASE_URL}
-ENV LIQUIBASE_USER=${LIQUIBASE_USER}
-ENV LIQUIBASE_USER_PASSWORD=${LIQUIBASE_USER_PASSWORD}
-HEALTHCHECK CMD java -jar liquibase.jar --url=${LIQUIBASE_URL} --username=${LIQUIBASE_USER} --password=${LIQUIBASE_USER_PASSWORD} --changeLogFile="master.xml" --classpath="postgresql-42.2.5.jar" --driver="org.postgresql.Driver" --logLevel=info --logFile=update.log update
-CMD sleep infinity
+COPY liquibase /opt/liquibase_postgres/
+COPY postgresql-42.2.5.jar /opt/jdbc/
+COPY docker-entrypoint.sh /usr/local/bin/
+COPY run_liquibase.sh /usr/local/bin/
+RUN chmod 777 /usr/local/bin/docker-entrypoint.sh
+RUN chmod 777 /usr/local/bin/run_liquibase.sh
