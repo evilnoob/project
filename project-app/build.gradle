@@ -29,6 +29,8 @@ dependencies {
     compile "org.springframework.boot:spring-boot-devtools"
     compile "org.apache.commons:commons-lang3:3.7"
     compile "org.apache.commons:commons-collections4:4.0"
+    compile 'com.zaxxer:HikariCP'
+    compile 'org.postgresql:postgresql'
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
 }

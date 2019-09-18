@@ -34,7 +34,8 @@ ext {
     springVersion = "5.1.9.RELEASE"
     springSecurityVersion = "5.1.9.RELEASE"
     springDataJpaVersion = "2.1.10.RELEASE"
-    postgresDriverVersion = "42.2.4"
+    postgresDriverVersion = "42.2.5"
+    hikariCPVersion = '2.7.7'
     hibernateVersion = "5.3.7.Final"
     commonsLangVersion = "3.7"
     lombokVersion = "1.16.20"
@@ -74,6 +75,9 @@ subprojects {
             //Hibernate
             dependency "org.hibernate:hibernate-core:$hibernateVersion"
             dependency "org.hibernate:hibernate-entitymanager:$hibernateVersion"
+
+            //Datasource
+            dependency "com.zaxxer:HikariCP:$hikariCPVersion"
 
             //PostgreSQL
             dependency "org.postgresql:postgresql:$postgresDriverVersion"
