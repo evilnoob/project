@@ -18,6 +18,7 @@ processResources {
 }
 
 dependencies {
+    compile project(":project-auth")
     compile project(":project-common")
 
     //implementation project(':project-main:domain')

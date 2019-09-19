@@ -3,13 +3,11 @@ package ru.evilnoob.project.app.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.jpa.boot.spi.IntegratorProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -28,7 +26,9 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories({"ru.evilnoob.project.app.repository"})
+@EnableJpaRepositories({
+        "ru.evilnoob.project.app.repository",
+        "ru.evilnoob.project.auth.repository"})
 @PropertySource(
         factory = YamlPropertySourceFactory.class,
         value = {"classpath:application.yml"/*, "file:${catalina.home}/conf/wcs-app/wrn-app.yml"*/},
@@ -38,6 +38,12 @@ public class RepositoryConfig {
 
     @Autowired
     private ConfigurableEnvironment env;
+
+    private String[] getPackagesToScan() {
+        return new String[]{
+                "ru.evilnoob.projectt.app.entity"
+        };
+    }
 
     @Bean
     public DataSource dataSource() {
@@ -77,11 +83,4 @@ public class RepositoryConfig {
         tm.setEntityManagerFactory(this.entityManagerFactory());
         return tm;
     }
-
-    private String[] getPackagesToScan() {
-        return new String[]{
-                "ru.evilnoob.projectt.app.entity"
-        };
-    }
-
 }
