@@ -9,4 +9,8 @@ include ':project-auth'
 findProject(':project-auth')?.name = 'project-auth'
 include 'project-common'
 findProject(':project-common')?.name = 'project-common'
+include 'project-frontend'
+findProject(':project-frontend')?.name = 'project-frontend'
+include 'project-frontend:auth'
+findProject(':auth')?.name = 'project-frontend:auth'
 

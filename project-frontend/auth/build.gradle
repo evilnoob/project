@@ -1,0 +1,13 @@
+apply plugin: 'com.moowork.node'
+
+node {
+    // Set the work directory for NPM
+    npmWorkDir = file("${rootDir}/project-app/src/client")
+    // Set the work directory where node_modules should be located
+    nodeModulesDir = file("${rootDir}/project-app/src/client")
+}
+
+task buildClient(type: NpmTask) {
+    args = ['run', 'build', "--env=${env}"]
+}
+buildClient.dependsOn(npm_install)
