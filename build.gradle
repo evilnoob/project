@@ -26,6 +26,7 @@ buildscript {
     dependencies {
         classpath "io.spring.gradle:dependency-management-plugin:1.0.4.RELEASE"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE"
+        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
     }
 }
 

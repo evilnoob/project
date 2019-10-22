@@ -51,14 +51,6 @@ task killRmRmiAllContainersAndImages(type: GradleBuild) {
     ])
 }
 
-task dockerBuildDbImage(type: Exec) {
-    def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
-    def runningEnvironment = isWindows ? "cmd" : "bash"
-    def parameter = isWindows ? "/c" : "-c"
-
-    commandLine runningEnvironment, parameter, "docker build -t project-postgres-java ${rootDir}/artifact/project/db/image/"
-}
-
 task dockerComposeAll(type: Exec) {
     def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
     def runningEnvironment = isWindows ? "cmd" : "bash"

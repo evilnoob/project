@@ -41,7 +41,8 @@ public class RepositoryConfig {
 
     private String[] getPackagesToScan() {
         return new String[]{
-                "ru.evilnoob.projectt.app.entity"
+                "ru.evilnoob.project.auth.entity",
+                "ru.evilnoob.project.app.entity"
         };
     }
 

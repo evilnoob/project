@@ -8,6 +8,7 @@ import ru.evilnob.project.common.entity.BusinessEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 @Table(schema = "project", name = "user")
 public class UserEntity extends BusinessEntity {
 
+    @Id
     @Column(name = "user_id")
     private Long userId;
 

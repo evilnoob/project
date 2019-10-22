@@ -1,13 +1,41 @@
 apply plugin: 'com.moowork.node'
 
 node {
+    version = '8.11.1'
+    npmVersion = '5.6.0'
+    download = true
     // Set the work directory for NPM
-    npmWorkDir = file("${rootDir}/project-app/src/client")
+    npmWorkDir = file("${rootDir}/project-frontend/auth/node")
     // Set the work directory where node_modules should be located
-    nodeModulesDir = file("${rootDir}/project-app/src/client")
+    nodeModulesDir = file("${rootDir}/project-frontend/auth/node")
 }
 
-task buildClient(type: NpmTask) {
-    args = ['run', 'build', "--env=${env}"]
+//------------------------------------------------------------------------------------------------------------------------
+//    Tasks - NPM
+//------------------------------------------------------------------------------------------------------------------------
+
+task cleanAuthClient(type: Delete) {
+    group 'buildAuthClient'
+    delete "${rootDir}/project-frontend/auth/dist"
 }
-buildClient.dependsOn(npm_install)
+
+task cleanAuthClientNpm(type: Delete) {
+    group 'buildAuthClient'
+    dependsOn 'cleanAuthClient'
+    delete "${rootDir}/project-frontend/auth/node", "${rootDir}/project-frontend/auth/node_modules"
+}
+
+task npmUpdate {
+    group 'buildAuthClient'
+    dependsOn 'npm_update'
+}
+
+//------------------------------------------------------------------------------------------------------------------------
+//    Tasks - buildAuthPage static
+//------------------------------------------------------------------------------------------------------------------------
+
+
+task buildAuthClient(type: NpmTask, dependsOn: npmInstall) {
+    group 'buildAuthClient'
+    args = ['run', 'buildAuthClient']
+}

@@ -4,6 +4,14 @@ task copyMainLiquibaseScripts(type: Copy) {
     into "${rootDir}/artifact/project/db"
 }
 
+task dockerBuildDbImage(type: Exec) {
+    def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
+    def runningEnvironment = isWindows ? "cmd" : "bash"
+    def parameter = isWindows ? "/c" : "-c"
+
+    commandLine runningEnvironment, parameter, "docker build -t project-postgres-java ${rootDir}/artifact/project/db/image/"
+}
+
 task killRmRmiDB(type: Exec) {
     ignoreExitValue = true
     def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
@@ -11,5 +19,14 @@ task killRmRmiDB(type: Exec) {
     def parameter = isWindows ? "/c" : "-c"
 
     commandLine runningEnvironment, parameter,
-            "docker kill project-db & docker rm project-db"
+            "docker kill project-db & docker rm project-db & docker rmi project-db"
+}
+
+task redeployDb(type: GradleBuild) {
+    group "redeploy"
+    setTasks([
+            "killRmRmiDB",
+            "copyMainLiquibaseScripts",
+            "composeContainers"
+    ])
 }

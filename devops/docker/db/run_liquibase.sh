@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -o pipefail
 
 until nc -z -v -w 10 localhost 5432; do
