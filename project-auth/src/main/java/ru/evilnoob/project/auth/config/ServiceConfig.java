@@ -1,4 +1,4 @@
-package ru.evilnoob.project.app.config;
+package ru.evilnoob.project.auth.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

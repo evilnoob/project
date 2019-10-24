@@ -2,8 +2,16 @@ group 'ru.evilnoob.project.auth'
 version rootProject.version
 
 dependencies {
-    compile project(":project-common")
+    compile project(':project-common')
 
-    compile "org.springframework.boot:spring-boot-starter-data-jpa"
-    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    //implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    //implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
+
+    implementation 'org.postgresql:postgresql'
+
+    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
 }

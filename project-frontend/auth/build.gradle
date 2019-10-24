@@ -31,11 +31,46 @@ task npmUpdate {
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-//    Tasks - buildAuthPage static
+//    Tasks - Integrated frontend
 //------------------------------------------------------------------------------------------------------------------------
 
-
-task buildAuthClient(type: NpmTask, dependsOn: npmInstall) {
+task buildClientToSpring(type: NpmTask, dependsOn: npmInstall) {
     group 'buildAuthClient'
-    args = ['run', 'buildAuthClient']
+    description = 'Compile client side folder for development'
+    args = ['run', 'buildToSpring']
+
+    task buildClientToSpringWatch(type: NpmTask, dependsOn: npmInstall) {
+        group 'buildAuthClient'
+        description = 'Compile client side folder for development'
+        args = ['run', 'buildToSpringWatch']
+    }
+
+}
+
+task buildClientToSpringProd(type: NpmTask, dependsOn: npmInstall) {
+    group 'devops'
+    description = 'Compile client side folder for prod'
+    args = ['run', 'buildToSpringProd']
+}
+
+//------------------------------------------------------------------------------------------------------------------------
+//    Tasks - Standalone frontend NOT USED
+//------------------------------------------------------------------------------------------------------------------------
+
+task buildStandaloneAuthClient(type: NpmTask, dependsOn: npmInstall) {
+    group 'buildAuthClient'
+    description = 'Compile client side folder for development'
+    args = ['run', 'buildStandalone']
+}
+
+task serveStandaloneClient(type: NpmTask, dependsOn: npmInstall) {
+    group 'buildAuthClient'
+    description = "Compile client side folder for production"
+    args = ['start']
+}
+
+task bootStandaloneClient(type: GradleBuild) {
+    group 'application'
+    setTasks(['clean', 'buildStandaloneClient', 'serveStandaloneClient'])
+//    finalizedBy 'npm_shutdown'
 }

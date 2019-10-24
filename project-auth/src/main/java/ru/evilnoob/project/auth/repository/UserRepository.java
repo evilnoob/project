@@ -2,8 +2,10 @@ package ru.evilnoob.project.auth.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.evilnoob.project.auth.entity.UserEntity;
+import ru.evilnoob.project.auth.domain.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    User findByUsername(String username);
 }

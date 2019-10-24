@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+
+  project-db:
+    image: project-postgres-db
+    container_name: project-postgres-db
+    build:
+      context: ./project-db/postgres
+    env_file: project.env
+    ports:
+      - "5432:5432"
