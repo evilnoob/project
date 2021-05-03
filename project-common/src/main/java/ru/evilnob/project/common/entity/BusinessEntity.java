@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
@@ -16,9 +15,6 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public class BusinessEntity {
 
-    @Column(name = "create_date")
     private LocalDateTime createDate;
-
-    @Column(name = "modify_date")
     private LocalDateTime modifyDate;
 }

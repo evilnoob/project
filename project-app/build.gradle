@@ -3,13 +3,14 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath(
-                "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
     }
 }
 
-apply plugin: "java"
-apply plugin: "org.springframework.boot"
+plugins {
+    id "java"
+    id "org.springframework.boot"
+}
 
 processResources {
     from(rootProject.projectDir.getPath() + "/properties") {
@@ -18,20 +19,19 @@ processResources {
 }
 
 dependencies {
-    compile project(":project-auth")
-    compile project(":project-common")
+    implementation project(":project-auth")
+    implementation project(":project-common")
 
     //implementation project(':project-main:domain')
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-data-jpa"
-    compile "org.springframework.boot:spring-boot-starter-jersey"
-    compile "org.springframework.boot:spring-boot-starter-security"
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-devtools"
-    compile "org.apache.commons:commons-lang3:3.7"
-    compile "org.apache.commons:commons-collections4:4.0"
-    compile 'com.zaxxer:HikariCP'
-    compile 'org.postgresql:postgresql'
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-starter-jersey"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    //implementation "org.springframework.boot:spring-boot-devtools"
+    //implementation "org.apache.commons:commons-lang3:3.7"
+    //implementation "org.apache.commons:commons-collections4:4.0"
 
-    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor 'org.projectlombok:lombok'
 }
