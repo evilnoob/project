@@ -1,4 +1,6 @@
 pluginManagement {
+    val springBootVersion by extra("3.4.4")
+    val dependecyManagementPluginVersion by extra("1.1.7")
     repositories {
         mavenCentral()
         maven {
@@ -6,17 +8,13 @@ pluginManagement {
             isAllowInsecureProtocol = true
         }
     }
+    plugins {
+        id("io.spring.dependency-management") version dependecyManagementPluginVersion
+        id("java")
+        id("org.springframework.boot") version springBootVersion
+    }
 }
 
 rootProject.name = "project"
-include("project-app")
-findProject(":project-app")?.name = "project-app"
-include(":project-db-old")
-findProject(":project-db-old")?.name = "project-db-old"
-include(":project-auth")
-findProject(":project-auth")?.name = "project-auth"
-include("project-common")
-findProject(":project-common")?.name = "project-common"
-include("project-liquibase")
-findProject(":project-liquibase")?.name = "project-liquibase"
+include("project-app", "project-auth", "project-common", "project-liquibase")
 

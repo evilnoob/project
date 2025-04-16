@@ -1,6 +1,7 @@
 **/*.iml
 .gradle
 .mvn
+.gigaide
 .idea
 .project
 .settings

@@ -5,13 +5,23 @@ version = "1.0"
 //apply(from = "buildProjectCommon.gradle.kts")
 //apply(from = "buildProjectDb.gradle.kts")
 
-//extra["springBootVersion"] = "3.12.0"
-val springBootVersion = "3.4.4"
-val dependecyManagementPluginVersion = "1.1.7"
-val liquibaseGradlePluginVersion = "3.0.2"
-val postgresDriverVersion = "42.7.5"
+val springBootVersion by extra("3.4.4")
+val dependecyManagementPluginVersion by extra("1.1.7")
+val postgresDriverVersion by extra("42.7.5")
+val commonsLangVersion by extra("3.17.0")
+val commonsCollectionsVersion by extra("4.4")
 
-buildscript {
+plugins {
+    id("io.spring.dependency-management")
+    id("java")
+    id("org.springframework.boot")
+}
+
+subprojects {
+    apply(plugin = "io.spring.dependency-management")
+    apply(plugin = "java")
+    apply(plugin = "org.springframework.boot")
+
     repositories {
         mavenLocal()
         mavenCentral()
@@ -25,71 +35,54 @@ buildscript {
         }
     }
 
+    dependencyManagement{
+        dependencies {
+            dependency("org.postgresql:postgresql:${postgresDriverVersion}")
+            dependency("org.apache.commons:commons-collections:${commonsCollectionsVersion}")
+            dependency("org.apache.commons:commons-lang3:${commonsLangVersion}")
+            //dependency("org.springframework.cloud:spring-cloud-dependencies:${extra["springCloudVersion"]}")
+            //dependency("org.hibernate:hibernate-bom:${extra["hibernateBomVersion"]}")
+            //dependency("com.zaxxer:HikariCP:${extra["hikariCPVersion"]}")
+            //dependency("org.springframework:spring-framework-bom:${extra["springVersion"]}")
+            //dependency("org.junit:junit-bom:${extra["junitVersion"]}")("org.postgresql:postgresql:${postgresDriverVersion}")
+        }
+
+    }
+
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("io.spring.gradle:dependency-management-plugin:${dependecyManagementPluginVersion}")
-        classpath("org.liquibase:liquibase-gradle-plugin:${liquibaseGradlePluginVersion}")
+        //Spring Boot
+        //implementation("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+        //implementation("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+        //implementation("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
+        //implementation("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+        //implementation("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
+        //implementation("org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}")
+
+        //Spring Cloud
+        //dependency("org.springframework.cloud:spring-cloud-starter-oauth2:${extra["springCloudVersion"]}")
+
+        //Hibernate
+        //dependency("org.hibernate:hibernate-core:${extra["hibernateVersion"]}")
+        //dependency("org.hibernate:hibernate-entitymanager:${extra["hibernateVersion"]}")
+
+        //Datasource
+        //dependency("com.zaxxer:HikariCP:${extra["hikariCPVersion"]}")
+
+        //PostgreSQL
+        //implementation("org.postgresql:postgresql:${postgresDriverVersion}")
+        //Other
+        //implementation("org.apache.commons:commons-lang3:${commonsLangVersion}")
+        //implementation("org.apache.commons:commons-collections:${commonsCollectionsVersion}")
+
+        //Test
+        //dependency("org.springframework:spring-test:${extra["springVersion"]}")
+        //dependency("junit:junit:${extra["junitVersion"]}")
+
+        //Lombok
+        //dependency("org.projectlombok:lombok:${extra["lombokVersion"]}")
     }
 }
 
-extra["commonsLangVersion"] = "3.12.0"
-extra["liquibaseVersion"] = "4.3.5"
-extra["liquibaseGradleVersion"] = "2.0.4"
-
-
-/*plugins {
-    id("org.springframework.boot") version "3.4.4"
-    id("io.spring.dependency-management") version "1.1.0"
-    id("java")
-}*/
-
-subprojects {
-    apply(plugin = "java")
-    apply(plugin = "io.spring.dependency-management")
-    apply(plugin = "org.springframework.boot")
-
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven(url = "https://maven.atlassian.com/3rdparty/")
-        maven(url = "https://plugins.gradle.org/m2/")
-        maven(url = "https://repo.spring.io/milestone/")
-        maven(url = "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/")
-    }
-
-    dependencyManagement {
-        dependencies {
-            //Spring Boot
-            dependency("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
-            dependency("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
-            dependency("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}")
-            dependency("org.springframework.boot:spring-boot-starter-jersey:${springBootVersion}")
-            dependency("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
-            dependency("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
-            dependency("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
-            dependency("org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}")
-
-            //Spring Cloud
-            //dependency("org.springframework.cloud:spring-cloud-starter-oauth2:${extra["springCloudVersion"]}")
-
-            //Hibernate
-            //dependency("org.hibernate:hibernate-core:${extra["hibernateVersion"]}")
-            //dependency("org.hibernate:hibernate-entitymanager:${extra["hibernateVersion"]}")
-
-            //Datasource
-            //dependency("com.zaxxer:HikariCP:${extra["hikariCPVersion"]}")
-
-            //PostgreSQL
-            dependency("org.postgresql:postgresql:$ХpostgresDriverVersion}")
-
-            dependency("org.apache.commons:commons-lang3:${extra["commonsLangVersion"]}")
-
-            //Test
-            //dependency("org.springframework:spring-test:${extra["springVersion"]}")
-            //dependency("junit:junit:${extra["junitVersion"]}")
-
-            //Lombok
-            //dependency("org.projectlombok:lombok:${extra["lombokVersion"]}")
-        }
-    }
+tasks.bootJar {
+    enabled = false
 }

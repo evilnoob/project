@@ -1,16 +1,15 @@
 package ru.evilnoob.project.auth.model.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.util.Collection;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.evilnob.project.common.entity.BusinessEntity;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.Collection;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -49,4 +48,5 @@ public class User extends BusinessEntity implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
 }

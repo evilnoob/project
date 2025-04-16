@@ -1,7 +1,16 @@
 package ru.evilnoob.project.auth.config.jwt;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -13,16 +22,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Optional;
-
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +32,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     @Override
-    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
         final String token = getToken(request.getHeader(HttpHeaders.AUTHORIZATION));
         if (token == null) {
             chain.doFilter(request, response);
@@ -42,7 +42,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(getUsernameFromToken(token));
         if (userDetails != null) {
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
+                    null,
                     Optional.ofNullable(userDetails).map(UserDetails::getAuthorities).orElse(new ArrayList<>()));
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
@@ -73,4 +74,5 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         return null;
     }
+
 }
