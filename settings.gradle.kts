@@ -1,0 +1,22 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        maven {
+            url = uri("https://plugins.gradle.org/m2/")
+            isAllowInsecureProtocol = true
+        }
+    }
+}
+
+rootProject.name = "project"
+include("project-app")
+findProject(":project-app")?.name = "project-app"
+include(":project-db-old")
+findProject(":project-db-old")?.name = "project-db-old"
+include(":project-auth")
+findProject(":project-auth")?.name = "project-auth"
+include("project-common")
+findProject(":project-common")?.name = "project-common"
+include("project-liquibase")
+findProject(":project-liquibase")?.name = "project-liquibase"
+
