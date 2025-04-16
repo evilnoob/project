@@ -2,7 +2,7 @@ group = "ru.evilnoob"
 version = "1.0"
 
 //apply(from = "buildProjectApp.gradle.kts")
-//apply(from = "buildProjectCommon.gradle.kts")
+apply(from = "build-project.gradle.kts")
 //apply(from = "buildProjectDb.gradle.kts")
 
 val springBootVersion by extra("3.4.4")

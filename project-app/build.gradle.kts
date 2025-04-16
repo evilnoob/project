@@ -5,24 +5,15 @@ plugins {
 
 tasks.processResources {
     from(rootProject.projectDir.path + "/properties") {
-        include("**/application.yml")
+        include("application.yml")
+        //duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
-    //filesMatching("application.yml") {
-    //    expand(project.properties)
-    //}
 }
-
-//processResources {
-//    from(rootProject.projectDir.path + "/properties") {
-//        include("**/application.yml")
-//    }
-//}
 
 dependencies {
     implementation(project(":project-auth"))
     implementation(project(":project-common"))
 
-    //implementation(project(":project-main:domain"))
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-jersey")

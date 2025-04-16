@@ -12,10 +12,11 @@ plugins {
     id("org.liquibase.gradle") version "3.0.2"
 }
 
-/*dependencies {
+dependencies {
     liquibaseRuntime("org.liquibase:liquibase-core:4.31.1")
-    liquibaseRuntime("info.picocli:picocli:4.6.1")
-}*/
+    liquibaseRuntime("info.picocli:picocli:4.7.6")
+    liquibaseRuntime("org.postgresql:postgresql")
+}
 
 /*liquibase {
     activities {
@@ -52,10 +53,11 @@ plugins {
 liquibase {
     activities.register("main") {
         this.arguments = mapOf(
-            "changeLogFile" to "liquibase/changelog.xml",
-            "url" to "jdbc:postgresql://localhost:5432/project_db",
-            "username" to "postgres",
-            "password" to "postgres")
+            "driver" to "org.postgresql.Driver",
+            "changelogFile" to "liquibase/changelog.xml",
+            "url" to "jdbc:postgresql://localhost:5432/project",
+            "username" to "project",
+            "password" to "qwerty")
     }
     runList = "main"
 }

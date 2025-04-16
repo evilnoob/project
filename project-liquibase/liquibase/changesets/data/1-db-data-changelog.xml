@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+  <changeSet id="1-db-data-user" author="evilnoob">
+    <sql>
+      INSERT INTO auth.user (username, password, enabled, create_date, modify_date)
+      VALUES ('admin', '$2y$12$mTAyzkYTgxn/K4CaK6HRcu01h5rPivStZ5tvf9rr.s4e9xpLRhm1e', true,
+      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP); --password
+    </sql>
+  </changeSet>
+</databaseChangeLog>

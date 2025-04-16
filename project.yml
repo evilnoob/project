@@ -1,11 +1,13 @@
-version: '3.7'
+version: '3.9'
+
 services:
 
   project-db:
-    image: project-postgres-db
+    image: postgres:17.4
+    restart: always
     container_name: project-postgres-db
-    build:
-      context: ./project-db/postgres
     env_file: project.env
+    volumes:
+      - ./var/lib/postgresql/data
     ports:
       - "5432:5432"
