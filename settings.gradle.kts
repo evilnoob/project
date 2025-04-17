@@ -16,4 +16,5 @@ pluginManagement {
 }
 
 rootProject.name = "project"
-include("project-app", "project-auth", "project-common", "project-liquibase", "project-oauth2")
+include("project-app", "project-auth", "project-common", "project-liquibase", "project-oauth2-auth")
+include("project-oauth2-resource-server")

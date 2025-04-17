@@ -1,10 +1,13 @@
+server:
+  port: 8081
+
 spring:
   security:
     oauth2:
       client:
         provider:
           project-keycloak:
-            issuer-uri: http://localhost:8080/auth/realms/project-keycloak
+            issuer-uri: http://localhost:8442/realms/project-keycloak
         registration:
           keycloak:
             provider: project-keycloak

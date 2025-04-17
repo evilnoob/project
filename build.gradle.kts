@@ -5,8 +5,6 @@ version = "1.0"
 apply(from = "build-project.gradle.kts")
 //apply(from = "buildProjectDb.gradle.kts")
 
-val springBootVersion by extra("3.4.4")
-val dependecyManagementPluginVersion by extra("1.1.7")
 val postgresDriverVersion by extra("42.7.5")
 val commonsLangVersion by extra("3.17.0")
 val commonsCollectionsVersion by extra("4.4")
