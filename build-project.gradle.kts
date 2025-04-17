@@ -51,13 +51,21 @@
 //    ])
 //}
 
+val isWindows = System.getProperty("os.name").lowercase().contains("windows")
+val runningEnvironment = if (isWindows) "cmd" else "bash"
+val parameter = if (isWindows) "/c" else "-c"
 
 tasks.register<Exec>("dockerComposeAll") {
-    val isWindows = System.getProperty("os.name").lowercase().contains("windows")
-    val runningEnvironment = if (isWindows) "cmd" else "bash"
-    val parameter = if (isWindows) "/c" else "-c"
-
     commandLine(runningEnvironment, parameter, "docker-compose -f ${rootDir}/project.yml up -d")
+}
+
+tasks.register<Exec>("execExportKeycloakRealm") {
+    commandLine(runningEnvironment, parameter, "docker exec keycloak sh -c \"./opt/keycloak/bin/kc.sh export --dir /tmp/keycloak/ --users realm_file\"")
+    isIgnoreExitValue = true
+    }
+
+tasks.register<Exec>("copyExportKeycloakRealmToProject") {
+    commandLine(runningEnvironment, parameter, "docker cp keycloak:/tmp/keycloak ./")
 }
 
 tasks.register<GradleBuild>("dockerCompose") {
@@ -68,4 +76,9 @@ tasks.register<GradleBuild>("dockerCompose") {
 tasks.register<GradleBuild>("liquibaseUpdate") {
     group = "deploy"
     tasks = listOf("project-liquibase:update")
+}
+
+tasks.register<GradleBuild>("exportKeycloakRealm") {
+    group = "deploy"
+    tasks = listOf("execExportKeycloakRealm", "copyExportKeycloakRealmToProject")
 }
