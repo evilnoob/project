@@ -1,0 +1,14 @@
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          project-keycloak:
+            issuer-uri: http://localhost:8080/auth/realms/project-keycloak
+        registration:
+          keycloak:
+            provider: project-keycloak
+            authorization-grant-type: authorization_code
+            client-id: project-keycloak-confidential
+            client-secret: secret
+            scope: openid
