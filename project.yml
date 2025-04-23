@@ -54,10 +54,17 @@ services:
     build: ./project-app
     ports:
       - "8080:8080"
-      - "5050:5050"
+      - "5005:5005"
     networks:
       - keycloak_network
 
+  project-oauth2-auth:
+    build: ./project-oauth2-auth
+    ports:
+      - "8081:8080"
+      - "5006:5005"
+    networks:
+      - keycloak_network
 
 networks:
   keycloak_network:

@@ -18,7 +18,7 @@ public class UiController {
                         oidc.getPreferredUsername() :
                         "");
         model.addAttribute("isAuthenticated", auth != null && auth.isAuthenticated());
-        model.addAttribute("isNice", auth != null && auth.getAuthorities().stream().anyMatch(authority -> Objects.equals("NICE", authority.getAuthority())));
+        model.addAttribute("isNice", auth != null && auth.getAuthorities().stream().anyMatch(authority -> Objects.equals("user-role", authority.getAuthority())));
         return "index.html";
     }
 
