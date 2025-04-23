@@ -50,6 +50,14 @@ services:
     networks:
       - keycloak_network
 
+  project-app:
+    build: ./project-app
+    ports:
+      - "8080:8080"
+      - "5050:5050"
+    networks:
+      - keycloak_network
+
 
 networks:
   keycloak_network:

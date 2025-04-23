@@ -1,9 +1,9 @@
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/db_notification
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://project-db:5432/project
+    username: admin
+    password: qwerty
     hikari:
       maximum-pool-size: 5
       connection-timeout: 15001
@@ -21,3 +21,12 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,env

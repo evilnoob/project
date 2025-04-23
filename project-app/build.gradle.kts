@@ -3,11 +3,21 @@ plugins {
     id("org.springframework.boot")
 }
 
-tasks.processResources {
+/*tasks.processResources {
     from(rootProject.projectDir.path + "/properties") {
         include("application.yml")
-        //duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
+}*/
+
+tasks.processResources {
+    filesMatching("application.yml") {
+        expand(project.properties)
+    }
+}
+
+tasks.bootJar {
+    archiveFileName.set("ex.jar")
 }
 
 dependencies {
